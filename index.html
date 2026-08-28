@@ -67,7 +67,7 @@
                 <h1>Capixy</h1>
                 <p>Smart Money Manager</p>
             </div>
-            <button class="reset-btn" id="btnReset">↺</button>
+            <button class="reset-btn" onclick="clearData()">↺</button>
         </div>
 
         <div class="balance-card">
@@ -86,19 +86,19 @@
         </div>
 
         <div class="nav-tabs">
-            <button class="tab-btn active" id="tabMain">Asosiy</button>
-            <button class="tab-btn" id="tabReminders">Eslatmalar</button>
-            <button class="tab-btn" id="tabDebts">Qarzlar</button>
-            <button class="tab-btn" id="tabAnalytics">Tahlil</button>
-            <button class="tab-btn" id="tabSettings">Sozlamalar</button>
+            <button class="tab-btn active" id="btnTabMain" onclick="showTab('pageMain', 'btnTabMain')">Asosiy</button>
+            <button class="tab-btn" id="btnTabReminders" onclick="showTab('pageReminders', 'btnTabReminders')">Eslatmalar</button>
+            <button class="tab-btn" id="btnTabDebts" onclick="showTab('pageDebts', 'btnTabDebts')">Qarzlar</button>
+            <button class="tab-btn" id="btnTabAnalytics" onclick="showTab('pageAnalytics', 'btnTabAnalytics')">Tahlil</button>
+            <button class="tab-btn" id="btnTabSettings" onclick="showTab('pageSettings', 'btnTabSettings')">Sozlamalar</button>
         </div>
 
-        <!-- ASOSIY -->
+        <!-- ASOSIY SAHIFA -->
         <div id="pageMain" class="section-page active">
             <div class="glass-box">
                 <div class="type-switch">
-                    <button class="sw-btn active exp" id="btnExp">Chiqim (-)</button>
-                    <button class="sw-btn inc" id="btnInc">Kirim (+)</button>
+                    <button class="sw-btn active exp" id="btnExp" onclick="setMode('exp')">Chiqim (-)</button>
+                    <button class="sw-btn inc" id="btnInc" onclick="setMode('inc')">Kirim (+)</button>
                 </div>
                 <div class="input-group">
                     <label>Nomi</label>
@@ -108,7 +108,7 @@
                     <label>Summa (UZS)</label>
                     <input type="number" id="tAmount" class="input-field" placeholder="0">
                 </div>
-                <button class="submit-btn" id="btnAddTrans">Qo'shish</button>
+                <button class="submit-btn" onclick="addTransaction()">Qo'shish</button>
             </div>
 
             <div class="glass-box">
@@ -117,10 +117,10 @@
             </div>
         </div>
 
-        <!-- ESLATMALAR -->
+        <!-- ESLATMALAR SAHIFASI -->
         <div id="pageReminders" class="section-page">
             <div class="glass-box">
-                <button class="notif-btn" id="btnReqNotif">🔔 Bildirishnoma ruxsatini berish</button>
+                <button class="notif-btn" onclick="reqNotif()">🔔 Bildirishnoma ruxsatini berish</button>
             </div>
             <div class="glass-box">
                 <div class="box-title">Yangi Eslatma</div>
@@ -132,7 +132,7 @@
                     <label>Vaqti</label>
                     <input type="datetime-local" id="rTime" class="input-field">
                 </div>
-                <button class="submit-btn" id="btnAddReminder">Eslatmani Saqlash</button>
+                <button class="submit-btn" onclick="addReminder()">Eslatmani Saqlash</button>
             </div>
             <div class="glass-box">
                 <div class="box-title">Eslatmalar Ro'yxati</div>
@@ -140,7 +140,7 @@
             </div>
         </div>
 
-        <!-- QARZLAR -->
+        <!-- QARZLAR SAHIFASI -->
         <div id="pageDebts" class="section-page">
             <div class="glass-box">
                 <div class="box-title">Yangi Qarz</div>
@@ -159,7 +159,7 @@
                         <option value="take">Oldim (Men berishim kerak)</option>
                     </select>
                 </div>
-                <button class="submit-btn" id="btnAddDebt">Qarzni Saqlash</button>
+                <button class="submit-btn" onclick="addDebt()">Qarzni Saqlash</button>
             </div>
             <div class="glass-box">
                 <div class="box-title">Qarzlar Ro'yxati</div>
@@ -167,7 +167,7 @@
             </div>
         </div>
 
-        <!-- TAHLIL -->
+        <!-- TAHLIL SAHIFASI -->
         <div id="pageAnalytics" class="section-page">
             <div class="glass-box">
                 <div class="box-title">Oylik Limit Sozlash</div>
@@ -175,7 +175,7 @@
                     <label>Limit Summasi</label>
                     <input type="number" id="budgetLimit" class="input-field" placeholder="0">
                 </div>
-                <button class="submit-btn" id="btnSaveLimit">Limitni Saqlash</button>
+                <button class="submit-btn" onclick="saveLimit()">Limitni Saqlash</button>
             </div>
             <div class="glass-box">
                 <div class="box-title">Xulosa</div>
@@ -183,213 +183,212 @@
             </div>
         </div>
 
-        <!-- SOZLAMALAR -->
+        <!-- SOZLAMALAR SAHIFASI -->
         <div id="pageSettings" class="section-page">
             <div class="glass-box">
                 <div class="box-title">Tizim Sozlamalari</div>
-                <button class="submit-btn" id="btnExport" style="background:#334155; margin-bottom:8px;">📥 Zaxira faylini yuklab olish</button>
-                <button class="submit-btn" id="btnClear" style="background:#ef4444;">🗑 Barcha ma'lumotlarni o'chirish</button>
+                <button class="submit-btn" onclick="exportData()" style="background:#334155; margin-bottom:8px;">📥 Zaxira faylini yuklab olish</button>
+                <button class="submit-btn" onclick="clearData()" style="background:#ef4444;">🗑 Barcha ma'lumotlarni o'chirish</button>
             </div>
         </div>
     </div>
 
     <script>
-        window.addEventListener('load', function() {
-            var mode = 'exp';
-            var transactions = [];
-            var debts = [];
-            var reminders = [];
-            var limit = 0;
+        var mode = 'exp';
+        var transactions = [];
+        var debts = [];
+        var reminders = [];
+        var limit = 0;
 
-            function safeSave() {
-                try {
-                    localStorage.setItem('capixy_db', JSON.stringify({
-                        t: transactions,
-                        d: debts,
-                        r: reminders,
-                        l: limit
-                    }));
-                } catch(e) {}
-                renderAll();
-            }
+        function safeSave() {
+            try {
+                localStorage.setItem('capixy_db_v2', JSON.stringify({ t: transactions, d: debts, r: reminders, l: limit }));
+            } catch(e) {}
+            renderAll();
+        }
 
-            function safeLoad() {
-                try {
-                    var data = localStorage.getItem('capixy_db');
-                    if(data) {
-                        var p = JSON.parse(data);
-                        transactions = p.t || [];
-                        debts = p.d || [];
-                        reminders = p.r || [];
-                        limit = p.l || 0;
-                        document.getElementById('budgetLimit').value = limit || '';
-                    }
-                } catch(e) {}
-                renderAll();
-            }
-
-            function showTab(pageId, btnId) {
-                var pages = document.querySelectorAll('.section-page');
-                for(var i=0; i<pages.length; i++) pages[i].classList.remove('active');
-                
-                var tabs = document.querySelectorAll('.tab-btn');
-                for(var j=0; j<tabs.length; j++) tabs[j].classList.remove('active');
-
-                document.getElementById(pageId).classList.add('active');
-                document.getElementById(btnId).classList.add('active');
-
-                if(pageId === 'pageAnalytics') renderAnalytics();
-            }
-
-            document.getElementById('tabMain').onclick = function() { showTab('pageMain', 'tabMain'); };
-            document.getElementById('tabReminders').onclick = function() { showTab('pageReminders', 'tabReminders'); };
-            document.getElementById('tabDebts').onclick = function() { showTab('pageDebts', 'tabDebts'); };
-            document.getElementById('tabAnalytics').onclick = function() { showTab('pageAnalytics', 'tabAnalytics'); };
-            document.getElementById('tabSettings').onclick = function() { showTab('pageSettings', 'tabSettings'); };
-
-            document.getElementById('btnExp').onclick = function() {
-                mode = 'exp';
-                this.className = 'sw-btn active exp';
-                document.getElementById('btnInc').className = 'sw-btn inc';
-            };
-
-            document.getElementById('btnInc').onclick = function() {
-                mode = 'inc';
-                this.className = 'sw-btn active inc';
-                document.getElementById('btnExp').className = 'sw-btn exp';
-            };
-
-            document.getElementById('btnAddTrans').onclick = function() {
-                var name = document.getElementById('tName').value;
-                var amount = parseFloat(document.getElementById('tAmount').value);
-
-                if(!name || !amount || amount <= 0) {
-                    alert("Ma'lumotlarni to'liq kiriting");
-                    return;
+        function safeLoad() {
+            try {
+                var data = localStorage.getItem('capixy_db_v2');
+                if(data) {
+                    var p = JSON.parse(data);
+                    transactions = p.t || [];
+                    debts = p.d || [];
+                    reminders = p.r || [];
+                    limit = p.l || 0;
+                    document.getElementById('budgetLimit').value = limit || '';
                 }
+            } catch(e) {}
+            renderAll();
+        }
 
-                transactions.unshift({
-                    id: Date.now(),
-                    name: name,
-                    amount: amount,
-                    type: mode,
-                    date: new Date().toLocaleDateString()
+        function showTab(pageId, btnId) {
+            var pages = document.querySelectorAll('.section-page');
+            for(var i=0; i<pages.length; i++) pages[i].classList.remove('active');
+            
+            var tabs = document.querySelectorAll('.tab-btn');
+            for(var j=0; j<tabs.length; j++) tabs[j].classList.remove('active');
+
+            document.getElementById(pageId).classList.add('active');
+            document.getElementById(btnId).classList.add('active');
+
+            if(pageId === 'pageAnalytics') renderAnalytics();
+        }
+
+        function setMode(m) {
+            mode = m;
+            document.getElementById('btnExp').className = 'sw-btn ' + (m === 'exp' ? 'active exp' : '');
+            document.getElementById('btnInc').className = 'sw-btn ' + (m === 'inc' ? 'active inc' : '');
+        }
+
+        function addTransaction() {
+            var name = document.getElementById('tName').value;
+            var amount = parseFloat(document.getElementById('tAmount').value);
+
+            if(!name || !amount || amount <= 0) {
+                alert("Ma'lumotlarni kiriting!");
+                return;
+            }
+
+            transactions.unshift({ id: Date.now(), name: name, amount: amount, type: mode, date: new Date().toLocaleDateString() });
+            document.getElementById('tName').value = '';
+            document.getElementById('tAmount').value = '';
+            safeSave();
+        }
+
+        function addDebt() {
+            var name = document.getElementById('dName').value;
+            var amount = parseFloat(document.getElementById('dAmount').value);
+            var type = document.getElementById('dType').value;
+
+            if(!name || !amount || amount <= 0) {
+                alert("Qarz ma'lumotlarini kiriting!");
+                return;
+            }
+
+            debts.unshift({ id: Date.now(), name: name, amount: amount, type: type });
+            document.getElementById('dName').value = '';
+            document.getElementById('dAmount').value = '';
+            safeSave();
+        }
+
+        function addReminder() {
+            var title = document.getElementById('rTitle').value;
+            var timeVal = document.getElementById('rTime').value;
+
+            if(!title || !timeVal) {
+                alert("Eslatma ma'lumotlarini kiriting!");
+                return;
+            }
+
+            reminders.push({ id: Date.now(), title: title, time: timeVal });
+            document.getElementById('rTitle').value = '';
+            document.getElementById('rTime').value = '';
+            safeSave();
+            alert("Eslatma saqlandi!");
+        }
+
+        function reqNotif() {
+            if ("Notification" in window) {
+                Notification.requestPermission().then(function(p) {
+                    alert(p === "granted" ? "Ruxsat berildi" : "Ruxsat berilmadi");
                 });
-
-                document.getElementById('tName').value = '';
-                document.getElementById('tAmount').value = '';
-                safeSave();
-            };
-
-            document.getElementById('btnAddDebt').onclick = function() {
-                var name = document.getElementById('dName').value;
-                var amount = parseFloat(document.getElementById('dAmount').value);
-                var type = document.getElementById('dType').value;
-
-                if(!name || !amount || amount <= 0) {
-                    alert("Qarz ma'lumotlarini to'liq kiriting");
-                    return;
-                }
-
-                debts.unshift({ id: Date.now(), name: name, amount: amount, type: type });
-                document.getElementById('dName').value = '';
-                document.getElementById('dAmount').value = '';
-                safeSave();
-            };
-
-            document.getElementById('btnAddReminder').onclick = function() {
-                var title = document.getElementById('rTitle').value;
-                var timeVal = document.getElementById('rTime').value;
-
-                if(!title || !timeVal) {
-                    alert("Eslatmani to'liq kiriting");
-                    return;
-                }
-
-                reminders.push({ id: Date.now(), title: title, time: timeVal });
-                document.getElementById('rTitle').value = '';
-                document.getElementById('rTime').value = '';
-                safeSave();
-                alert("Eslatma saqlandi");
-            };
-
-            document.getElementById('btnReqNotif').onclick = function() {
-                if ("Notification" in window) {
-                    Notification.requestPermission().then(function(p) {
-                        alert(p === "granted" ? "Ruxsat berildi" : "Ruxsat berilmadi");
-                    });
-                } else {
-                    alert("Bildirishnoma qo'llab-quvvatlanmaydi");
-                }
-            };
-
-            document.getElementById('btnSaveLimit').onclick = function() {
-                limit = parseFloat(document.getElementById('budgetLimit').value) || 0;
-                safeSave();
-                alert("Limit saqlandi");
-            };
-
-            document.getElementById('btnReset').onclick = clearData;
-            document.getElementById('btnClear').onclick = clearData;
-
-            function clearData() {
-                if(confirm("Tozalashni xohlaysizmi?")) {
-                    localStorage.removeItem('capixy_db');
-                    transactions = []; debts = []; reminders = []; limit = 0;
-                    safeSave();
-                }
+            } else {
+                alert("Brauzeringiz bildirishnomani qo'llab-quvvatlamaydi");
             }
+        }
 
-            document.getElementById('btnExport').onclick = function() {
-                var str = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify({ t: transactions, d: debts, r: reminders, l: limit }));
-                var a = document.createElement('a');
-                a.href = str;
-                a.download = "capixy_backup.json";
-                a.click();
-            };
+        function saveLimit() {
+            limit = parseFloat(document.getElementById('budgetLimit').value) || 0;
+            safeSave();
+            alert("Limit saqlandi");
+        }
 
-            function renderAll() {
-                var inc = 0, exp = 0;
-                for(var i=0; i<transactions.length; i++) {
-                    if(transactions[i].type === 'inc') inc += transactions[i].amount;
-                    else exp += transactions[i].amount;
-                }
-                var bal = inc - exp;
-
-                document.getElementById('uiBalance').innerText = bal.toLocaleString() + " UZS";
-                document.getElementById('uiIncome').innerText = "+" + inc.toLocaleString() + " UZS";
-                document.getElementById('uiExpense').innerText = "-" + exp.toLocaleString() + " UZS";
-
-                // Trans List
-                var tHtml = '';
-                if(transactions.length === 0) tHtml = '<div style="text-align:center; font-size:11px; color:#64748b;">Ro\'yxat bo\'sh</div>';
-                for(var j=0; j<transactions.length; j++) {
-                    var item = transactions[j];
-                    tHtml += '<div class="item-row"><div><div class="item-title">' + item.name + '</div><div class="item-sub">' + item.date + '</div></div><div class="item-right"><div class="item-val ' + item.type + '">' + (item.type==='inc'?'+':'-') + item.amount.toLocaleString() + ' UZS</div><button class="del-btn" onclick="delTrans(' + item.id + ')">✕</button></div></div>';
-                }
-                document.getElementById('transList').innerHTML = tHtml;
-
-                // Debt List
-                var dHtml = '';
-                if(debts.length === 0) dHtml = '<div style="text-align:center; font-size:11px; color:#64748b;">Qarzlar yo\'q</div>';
-                for(var k=0; k<debts.length; k++) {
-                    var d = debts[k];
-                    dHtml += '<div class="item-row"><div><div class="item-title">' + d.name + '</div><div class="item-sub">' + (d.type==='give'?'Menga berishi kerak':'Men berishim kerak') + '</div></div><div class="item-right"><div class="item-val ' + (d.type==='give'?'inc':'exp') + '">' + d.amount.toLocaleString() + ' UZS</div><button class="del-btn" onclick="delDebt(' + d.id + ')">✕</button></div></div>';
-                }
-                document.getElementById('debtList').innerHTML = dHtml;
-
-                // Reminder List
-                var rHtml = '';
-                if(reminders.length === 0) rHtml = '<div style="text-align:center; font-size:11px; color:#64748b;">Eslatmalar yo\'q</div>';
-                for(var m=0; m<reminders.length; m++) {
-                    var r = reminders[m];
-                    rHtml += '<div class="item-row"><div><div class="item-title">' + r.title + '</div><div class="item-sub">' + r.time + '</div></div><div class="item-right"><button class="del-btn" onclick="delReminder(' + r.id + ')">✕</button></div></div>';
-                }
-                document.getElementById('reminderList').innerHTML = rHtml;
+        function clearData() {
+            if(confirm("Ma'lumotlarni o'chirmoqchimisiz?")) {
+                localStorage.removeItem('capixy_db_v2');
+                transactions = []; debts = []; reminders = []; limit = 0;
+                safeSave();
             }
+        }
 
-            function renderAnalytics() {
-                var exp = 0;
-                for(var i=0; i<transactions.length; i++) {
-                    if(transactions[i].type === 'exp') exp += transactions[i].amount;
-   
+        function exportData() {
+            var str = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify({ t: transactions, d: debts, r: reminders, l: limit }));
+            var a = document.createElement('a');
+            a.href = str;
+            a.download = "capixy_backup.json";
+            a.click();
+        }
+
+        function delTrans(id) {
+            transactions = transactions.filter(function(t){ return t.id !== id; });
+            safeSave();
+        }
+
+        function delDebt(id) {
+            debts = debts.filter(function(d){ return d.id !== id; });
+            safeSave();
+        }
+
+        function delReminder(id) {
+            reminders = reminders.filter(function(r){ return r.id !== id; });
+            safeSave();
+        }
+
+        function renderAll() {
+            var inc = 0, exp = 0;
+            for(var i=0; i<transactions.length; i++) {
+                if(transactions[i].type === 'inc') inc += transactions[i].amount;
+                else exp += transactions[i].amount;
+            }
+            var bal = inc - exp;
+
+            document.getElementById('uiBalance').innerText = bal.toLocaleString() + " UZS";
+            document.getElementById('uiIncome').innerText = "+" + inc.toLocaleString() + " UZS";
+            document.getElementById('uiExpense').innerText = "-" + exp.toLocaleString() + " UZS";
+
+            var tHtml = '';
+            if(transactions.length === 0) tHtml = '<div style="text-align:center; font-size:11px; color:#64748b;">Ro\'yxat bo\'sh</div>';
+            for(var j=0; j<transactions.length; j++) {
+                var item = transactions[j];
+                tHtml += '<div class="item-row"><div><div class="item-title">' + item.name + '</div><div class="item-sub">' + item.date + '</div></div><div class="item-right"><div class="item-val ' + item.type + '">' + (item.type==='inc'?'+':'-') + item.amount.toLocaleString() + ' UZS</div><button class="del-btn" onclick="delTrans(' + item.id + ')">✕</button></div></div>';
+            }
+            document.getElementById('transList').innerHTML = tHtml;
+
+            var dHtml = '';
+            if(debts.length === 0) dHtml = '<div style="text-align:center; font-size:11px; color:#64748b;">Qarzlar yo\'q</div>';
+            for(var k=0; k<debts.length; k++) {
+                var d = debts[k];
+                dHtml += '<div class="item-row"><div><div class="item-title">' + d.name + '</div><div class="item-sub">' + (d.type==='give'?'Menga berishi kerak':'Men berishim kerak') + '</div></div><div class="item-right"><div class="item-val ' + (d.type==='give'?'inc':'exp') + '">' + d.amount.toLocaleString() + ' UZS</div><button class="del-btn" onclick="delDebt(' + d.id + ')">✕</button></div></div>';
+            }
+            document.getElementById('debtList').innerHTML = dHtml;
+
+            var rHtml = '';
+            if(reminders.length === 0) rHtml = '<div style="text-align:center; font-size:11px; color:#64748b;">Eslatmalar yo\'q</div>';
+            for(var m=0; m<reminders.length; m++) {
+                var r = reminders[m];
+                rHtml += '<div class="item-row"><div><div class="item-title">' + r.title + '</div><div class="item-sub">' + r.time + '</div></div><div class="item-right"><button class="del-btn" onclick="delReminder(' + r.id + ')">✕</button></div></div>';
+            }
+            document.getElementById('reminderList').innerHTML = rHtml;
+        }
+
+        function renderAnalytics() {
+            var exp = 0;
+            for(var i=0; i<transactions.length; i++) {
+                if(transactions[i].type === 'exp') exp += transactions[i].amount;
+            }
+            var txt = 'Jami xarajat: <b>' + exp.toLocaleString() + ' UZS</b><br>';
+            if(limit > 0) {
+                var pct = Math.round((exp / limit) * 100);
+                txt += 'Belgilangan limit: <b>' + limit.toLocaleString() + ' UZS</b><br>Ishlatildi: <b>' + pct + '%</b>';
+            } else {
+                txt += 'Limit belgilanmagan.';
+            }
+            document.getElementById('analyticsText').innerHTML = txt;
+        }
+
+        // Dastlabki yuklanish
+        safeLoad();
+    </script>
+</body>
+</html>
