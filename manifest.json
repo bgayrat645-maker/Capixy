@@ -1,0 +1,15 @@
+{
+  "name": "Capixy Wallet",
+  "short_name": "Capixy",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#090d16",
+  "theme_color": "#090d16",
+  "icons": [
+    {
+      "src": "https://cdn-icons-png.flaticon.com/512/888/888870.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
