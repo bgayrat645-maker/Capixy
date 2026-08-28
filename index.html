@@ -2,94 +2,100 @@
 <html lang="uz">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Capixy Wallet</title>
-    <meta name="theme-color" content="#090d16">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: sans-serif; transition: background 0.3s, color 0.3s; }
+        
+        /* Tun rejimi */
+        body.dark { background-color: #0d1117; color: #c9d1d9; }
+        body.dark .glass-box, body.dark .balance-card, body.dark .nav-tabs { background: #161b22; border-color: #30363d; color: #c9d1d9; }
+        body.dark .brand h1 { color: #58a6ff; }
+        body.dark .bal-value { color: #fff; }
+        body.dark .bal-title, body.dark .box-title, body.dark .input-group label, body.dark .item-sub { color: #8b949e; }
+        body.dark .item-row, body.dark .input-field, body.dark .type-switch, body.dark .cat-bar-bg { background: #0d1117; border-color: #30363d; color: #fff; }
+        body.dark .tab-btn { color: #8b949e; }
+        body.dark .tab-btn.active { background: #21262d; color: #fff; }
 
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Plus Jakarta Sans', sans-serif; -webkit-tap-highlight-color: transparent; }
-        body { background-color: #090d16; color: #f8fafc; padding: 20px 16px; display: flex; justify-content: center; }
-        .app-container { width: 100%; max-width: 420px; display: flex; flex-direction: column; gap: 16px; }
+        /* Kun rejimi */
+        body.light { background-color: #f0f2f5; color: #24292e; }
+        body.light .glass-box, body.light .balance-card, body.light .nav-tabs { background: #ffffff; border-color: #e1e4e8; box-shadow: 0 2px 4px rgba(0,0,0,0.05); color: #24292e; }
+        body.light .brand h1 { color: #0366d6; }
+        body.light .bal-value { color: #24292e; }
+        body.light .bal-title, body.light .box-title, body.light .input-group label, body.light .item-sub { color: #586069; }
+        body.light .item-row, body.light .input-field, body.light .type-switch, body.light .cat-bar-bg { background: #f6f8fa; border-color: #e1e4e8; color: #24292e; }
+        body.light .tab-btn { color: #586069; }
+        body.light .tab-btn.active { background: #e1e4e8; color: #24292e; font-weight: bold; }
+
+        body { padding: 12px; display: flex; justify-content: center; }
+        .app-container { width: 100%; max-width: 400px; display: flex; flex-direction: column; gap: 12px; }
+
         .header { display: flex; justify-content: space-between; align-items: center; }
-        .brand h1 { font-size: 20px; font-weight: 700; color: #fff; }
-        .brand p { font-size: 11px; color: #64748b; }
-        .reset-btn { background: #1e293b; border: 1px solid rgba(255,255,255,0.1); color: #ef4444; width: 36px; height: 36px; border-radius: 10px; font-size: 16px; cursor: pointer; }
+        .brand h1 { font-size: 18px; }
 
-        .balance-card { background: linear-gradient(135deg, #1e1b4b 0%, #0f172a 100%); border: 1px solid rgba(99, 102, 241, 0.25); padding: 20px; border-radius: 20px; }
-        .bal-title { font-size: 11px; color: #94a3b8; text-transform: uppercase; font-weight: 600; }
-        .bal-value { font-size: 28px; font-weight: 700; color: #fff; margin: 4px 0 12px 0; }
-        .stats { display: flex; gap: 10px; border-top: 1px solid rgba(255,255,255,0.08); padding-top: 10px; }
+        .balance-card { border: 1px solid; padding: 14px; border-radius: 14px; }
+        .bal-title { font-size: 10px; text-transform: uppercase; }
+        .bal-value { font-size: 22px; font-weight: bold; margin: 4px 0 8px 0; }
+        .stats { display: flex; gap: 10px; border-top: 1px solid inherit; padding-top: 8px; font-size: 11px; }
         .stat-box { flex: 1; }
-        .stat-lbl { font-size: 10px; color: #64748b; }
-        .stat-val { font-size: 12px; font-weight: 600; }
-        .stat-val.inc { color: #34d399; }
-        .stat-val.exp { color: #f87171; }
+        .inc { color: #3fb950; }
+        .exp { color: #f85149; }
 
-        .nav-tabs { display: flex; background: #0f172a; padding: 4px; border-radius: 14px; border: 1px solid rgba(255,255,255,0.05); overflow-x: auto; }
-        .tab-btn { flex: 1; padding: 10px 4px; border: none; background: transparent; color: #64748b; font-size: 11px; font-weight: 600; border-radius: 10px; cursor: pointer; text-align: center; white-space: nowrap; }
-        .tab-btn.active { background: #1e293b; color: #fff; }
+        .nav-tabs { display: flex; padding: 3px; border-radius: 10px; border: 1px solid; gap: 2px; }
+        .tab-btn { flex: 1; padding: 6px 2px; border: none; background: transparent; font-size: 10px; border-radius: 6px; cursor: pointer; }
 
-        .glass-box { background: rgba(30, 41, 59, 0.4); border: 1px solid rgba(255,255,255,0.05); border-radius: 18px; padding: 16px; display: flex; flex-direction: column; gap: 12px; }
-        .box-title { font-size: 13px; font-weight: 600; color: #cbd5e1; }
+        .glass-box { border: 1px solid; border-radius: 12px; padding: 12px; display: flex; flex-direction: column; gap: 8px; }
+        .box-title { font-size: 12px; font-weight: bold; display: flex; justify-content: space-between; align-items: center; }
 
-        .type-switch { display: flex; background: #0f172a; padding: 3px; border-radius: 10px; gap: 4px; }
-        .sw-btn { flex: 1; border: none; background: transparent; padding: 6px; font-size: 11px; font-weight: 600; color: #64748b; border-radius: 8px; cursor: pointer; }
-        .sw-btn.active.exp { background: rgba(248, 113, 113, 0.2); color: #f87171; }
-        .sw-btn.active.inc { background: rgba(52, 211, 153, 0.2); color: #34d399; }
+        .type-switch { display: flex; padding: 2px; border-radius: 8px; gap: 2px; border: 1px solid; }
+        .sw-btn { flex: 1; border: none; background: transparent; padding: 5px; font-size: 10px; border-radius: 6px; cursor: pointer; color: inherit; }
+        .sw-btn.active.exp { background: rgba(248, 81, 73, 0.2); color: #f85149; }
+        .sw-btn.active.inc { background: rgba(63, 185, 80, 0.2); color: #3fb950; }
 
-        .input-group { display: flex; flex-direction: column; gap: 4px; }
-        .input-group label { font-size: 10px; color: #64748b; font-weight: 600; text-transform: uppercase; }
-        .input-field { background: #0f172a; border: 1px solid rgba(255,255,255,0.08); padding: 10px 12px; border-radius: 10px; color: #fff; font-size: 13px; outline: none; }
+        .input-group { display: flex; flex-direction: column; gap: 3px; }
+        .input-group label { font-size: 9px; text-transform: uppercase; }
+        .input-field { border: 1px solid; padding: 6px 8px; border-radius: 6px; font-size: 11px; outline: none; }
 
-        .submit-btn { background: #6366f1; color: #fff; border: none; padding: 12px; border-radius: 10px; font-weight: 600; font-size: 13px; cursor: pointer; }
-        .notif-btn { background: #10b981; color: #fff; border: none; padding: 10px; border-radius: 10px; font-weight: 600; font-size: 12px; cursor: pointer; width: 100%; }
+        .submit-btn { background: #238636; color: #fff; border: none; padding: 8px; border-radius: 6px; font-size: 11px; font-weight: bold; cursor: pointer; }
+        .danger-btn { background: #da3633; color: #fff; border: none; padding: 8px; border-radius: 6px; font-size: 11px; font-weight: bold; cursor: pointer; }
+        .theme-btn { background: #1f6feb; color: #fff; border: none; padding: 8px; border-radius: 6px; font-size: 11px; font-weight: bold; cursor: pointer; }
 
-        .item-list { display: flex; flex-direction: column; gap: 8px; max-height: 220px; overflow-y: auto; }
-        .item-row { background: rgba(15, 23, 42, 0.6); padding: 10px 12px; border-radius: 12px; display: flex; justify-content: space-between; align-items: center; }
-        .item-title { font-size: 12px; font-weight: 600; color: #f1f5f9; }
-        .item-sub { font-size: 9px; color: #64748b; }
-        .item-right { display: flex; align-items: center; gap: 8px; }
-        .item-val { font-size: 12px; font-weight: 700; }
-        .item-val.inc { color: #34d399; }
-        .item-val.exp { color: #f87171; }
-        .del-btn { background: none; border: none; color: #ef4444; cursor: pointer; font-size: 14px; padding: 4px 8px; }
+        .item-list { display: flex; flex-direction: column; gap: 6px; max-height: 180px; overflow-y: auto; }
+        .item-row { padding: 6px 8px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center; font-size: 11px; border: 1px solid; }
+        .item-sub { font-size: 9px; }
+        .del-btn { background: none; border: none; color: #f85149; cursor: pointer; font-size: 11px; margin-left: 6px; }
 
-        .section-page { display: none; flex-direction: column; gap: 16px; }
+        .section-page { display: none; flex-direction: column; gap: 10px; }
         .section-page.active { display: flex; }
+
+        .cat-bar-container { margin-top: 4px; display: flex; flex-direction: column; gap: 6px; }
+        .cat-bar-item { font-size: 10px; }
+        .cat-bar-bg { border-radius: 4px; height: 6px; width: 100%; overflow: hidden; margin-top: 2px; border: 1px solid; }
+        .cat-bar-fill { background: #58a6ff; height: 100%; width: 0%; transition: width 0.3s; }
     </style>
 </head>
-<body>
+<body class="dark">
 
     <div class="app-container">
         <div class="header">
             <div class="brand">
-                <h1>Capixy</h1>
-                <p>Smart Money Manager</p>
+                <h1>Capixy Wallet</h1>
             </div>
-            <button class="reset-btn" onclick="clearData()">↺</button>
         </div>
 
         <div class="balance-card">
             <div class="bal-title">Umumiy Balans</div>
-            <div class="bal-value" id="uiBalance">0 UZS</div>
+            <div class="bal-value" id="uiBalance">0 so'm</div>
             <div class="stats">
-                <div class="stat-box">
-                    <div class="stat-lbl">Kirim</div>
-                    <div class="stat-val inc" id="uiIncome">+0 UZS</div>
-                </div>
-                <div class="stat-box">
-                    <div class="stat-lbl">Chiqim</div>
-                    <div class="stat-val exp" id="uiExpense">-0 UZS</div>
-                </div>
+                <div class="stat-box">Kirim: <span class="inc" id="uiIncome">+0</span></div>
+                <div class="stat-box">Chiqim: <span class="exp" id="uiExpense">-0</span></div>
             </div>
         </div>
 
         <div class="nav-tabs">
             <button class="tab-btn active" id="btnTabMain" onclick="showTab('pageMain', 'btnTabMain')">Asosiy</button>
-            <button class="tab-btn" id="btnTabReminders" onclick="showTab('pageReminders', 'btnTabReminders')">Eslatmalar</button>
-            <button class="tab-btn" id="btnTabDebts" onclick="showTab('pageDebts', 'btnTabDebts')">Qarzlar</button>
             <button class="tab-btn" id="btnTabAnalytics" onclick="showTab('pageAnalytics', 'btnTabAnalytics')">Tahlil</button>
+            <button class="tab-btn" id="btnTabDebts" onclick="showTab('pageDebts', 'btnTabDebts')">Qarzlar</button>
             <button class="tab-btn" id="btnTabSettings" onclick="showTab('pageSettings', 'btnTabSettings')">Sozlamalar</button>
         </div>
 
@@ -105,38 +111,52 @@
                     <input type="text" id="tName" class="input-field" placeholder="Masalan: Tushlik">
                 </div>
                 <div class="input-group">
-                    <label>Summa (UZS)</label>
+                    <label>Summa (so'm)</label>
                     <input type="number" id="tAmount" class="input-field" placeholder="0">
+                </div>
+                <div class="input-group">
+                    <label>Kategoriya</label>
+                    <select id="tCat" class="input-field" onchange="checkCategory()">
+                        <option value="Oziq-ovqat">🍔 Oziq-ovqat</option>
+                        <option value="Supermarket">🛒 Supermarket</option>
+                        <option value="Kofe/Choy">☕ Kofe/Choy</option>
+                        <option value="Taksi">🚕 Taksi</option>
+                        <option value="Jamoat transporti">🚌 Jamoat transporti</option>
+                        <option value="Yoqilg'i">⛽ Yoqilg'i</option>
+                        <option value="Kiyim-kechak">👕 Kiyim-kechak</option>
+                        <option value="Poyabzal">👞 Poyabzal</option>
+                        <option value="O'yinlar">🎮 O'yinlar</option>
+                        <option value="Kino/Ko'ngilochar">🎬 Kino/Ko'ngilochar</option>
+                        <option value="O'qish/Kurslar">📚 O'qish/Kurslar</option>
+                        <option value="O'quv qurollari">✏️ O'quv qurollari</option>
+                        <option value="Ijara/Kommunal">🏠 Ijara/Kommunal</option>
+                        <option value="Tok/Suv/Gaz">💡 Tok/Suv/Gaz</option>
+                        <option value="Dori-darmon">💊 Dori-darmon</option>
+                        <option value="Shifokor">🩺 Shifokor</option>
+                        <option value="Boshqa">📦 Boshqa</option>
+                    </select>
+                </div>
+                <div class="input-group" id="customCatGroup" style="display: none;">
+                    <label>Kategoriya nomini yozing</label>
+                    <input type="text" id="tCustomCat" class="input-field" placeholder="Masalan: Sovg'a">
                 </div>
                 <button class="submit-btn" onclick="addTransaction()">Qo'shish</button>
             </div>
 
             <div class="glass-box">
-                <div class="box-title">Tranzaksiyalar</div>
+                <div class="box-title">
+                    <span>Tarix</span>
+                    <input type="text" id="searchBox" placeholder="Qidiruv..." oninput="renderAll()" class="input-field" style="width:80px; padding:2px 4px; font-size:9px;">
+                </div>
                 <div class="item-list" id="transList"></div>
             </div>
         </div>
 
-        <!-- ESLATMALAR SAHIFASI -->
-        <div id="pageReminders" class="section-page">
+        <!-- TAHLIL SAHIFASI -->
+        <div id="pageAnalytics" class="section-page">
             <div class="glass-box">
-                <button class="notif-btn" onclick="reqNotif()">🔔 Bildirishnoma ruxsatini berish</button>
-            </div>
-            <div class="glass-box">
-                <div class="box-title">Yangi Eslatma</div>
-                <div class="input-group">
-                    <label>Eslatma Matni</label>
-                    <input type="text" id="rTitle" class="input-field" placeholder="Masalan: Kommunal to'lov">
-                </div>
-                <div class="input-group">
-                    <label>Vaqti</label>
-                    <input type="datetime-local" id="rTime" class="input-field">
-                </div>
-                <button class="submit-btn" onclick="addReminder()">Eslatmani Saqlash</button>
-            </div>
-            <div class="glass-box">
-                <div class="box-title">Eslatmalar Ro'yxati</div>
-                <div class="item-list" id="reminderList"></div>
+                <div class="box-title">Xarajatlar bo'yicha tahlil</div>
+                <div class="cat-bar-container" id="analyticsBars"></div>
             </div>
         </div>
 
@@ -145,50 +165,37 @@
             <div class="glass-box">
                 <div class="box-title">Yangi Qarz</div>
                 <div class="input-group">
-                    <label>Shaxs Ismi</label>
-                    <input type="text" id="dName" class="input-field" placeholder="Kimga / Kimdan">
+                    <label>Ism</label>
+                    <input type="text" id="dName" class="input-field" placeholder="Ism">
                 </div>
                 <div class="input-group">
-                    <label>Summa</label>
+                    <label>Summa (so'm)</label>
                     <input type="number" id="dAmount" class="input-field" placeholder="0">
                 </div>
                 <div class="input-group">
-                    <label>Yo'nalish</label>
+                    <label>Turi</label>
                     <select id="dType" class="input-field">
                         <option value="give">Berdim (Menga berishi kerak)</option>
                         <option value="take">Oldim (Men berishim kerak)</option>
                     </select>
                 </div>
-                <button class="submit-btn" onclick="addDebt()">Qarzni Saqlash</button>
+                <button class="submit-btn" onclick="addDebt()">Saqlash</button>
             </div>
             <div class="glass-box">
-                <div class="box-title">Qarzlar Ro'yxati</div>
+                <div class="box-title">Qarzlar</div>
                 <div class="item-list" id="debtList"></div>
-            </div>
-        </div>
-
-        <!-- TAHLIL SAHIFASI -->
-        <div id="pageAnalytics" class="section-page">
-            <div class="glass-box">
-                <div class="box-title">Oylik Limit Sozlash</div>
-                <div class="input-group">
-                    <label>Limit Summasi</label>
-                    <input type="number" id="budgetLimit" class="input-field" placeholder="0">
-                </div>
-                <button class="submit-btn" onclick="saveLimit()">Limitni Saqlash</button>
-            </div>
-            <div class="glass-box">
-                <div class="box-title">Xulosa</div>
-                <div id="analyticsText" style="font-size: 12px; color: #94a3b8; line-height: 1.6;"></div>
             </div>
         </div>
 
         <!-- SOZLAMALAR SAHIFASI -->
         <div id="pageSettings" class="section-page">
             <div class="glass-box">
-                <div class="box-title">Tizim Sozlamalari</div>
-                <button class="submit-btn" onclick="exportData()" style="background:#334155; margin-bottom:8px;">📥 Zaxira faylini yuklab olish</button>
-                <button class="submit-btn" onclick="clearData()" style="background:#ef4444;">🗑 Barcha ma'lumotlarni o'chirish</button>
+                <div class="box-title">Ko'rinish rejimi</div>
+                <button class="theme-btn" onclick="toggleTheme()">Rejimni o'zgartirish (Tun / Kun)</button>
+            </div>
+            <div class="glass-box">
+                <div class="box-title">Ma'lumotlarni tozalash</div>
+                <button class="danger-btn" onclick="clearData()">Barcha ma'lumotlarni o'chirish</button>
             </div>
         </div>
     </div>
@@ -197,42 +204,55 @@
         var mode = 'exp';
         var transactions = [];
         var debts = [];
-        var reminders = [];
-        var limit = 0;
+        var currentTheme = 'dark';
 
         function safeSave() {
             try {
-                localStorage.setItem('capixy_db_v2', JSON.stringify({ t: transactions, d: debts, r: reminders, l: limit }));
+                localStorage.setItem('acode_capixy_db', JSON.stringify({
+                    t: transactions, d: debts, theme: currentTheme
+                }));
             } catch(e) {}
             renderAll();
         }
 
         function safeLoad() {
             try {
-                var data = localStorage.getItem('capixy_db_v2');
+                var data = localStorage.getItem('acode_capixy_db');
                 if(data) {
                     var p = JSON.parse(data);
                     transactions = p.t || [];
                     debts = p.d || [];
-                    reminders = p.r || [];
-                    limit = p.l || 0;
-                    document.getElementById('budgetLimit').value = limit || '';
+                    if(p.theme) currentTheme = p.theme;
                 }
             } catch(e) {}
+            
+            document.body.className = currentTheme;
             renderAll();
+        }
+
+        function toggleTheme() {
+            currentTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            document.body.className = currentTheme;
+            safeSave();
         }
 
         function showTab(pageId, btnId) {
             var pages = document.querySelectorAll('.section-page');
-            for(var i=0; i<pages.length; i++) pages[i].classList.remove('active');
+            for(var i = 0; i < pages.length; i++) {
+                pages[i].classList.remove('active');
+            }
             
             var tabs = document.querySelectorAll('.tab-btn');
-            for(var j=0; j<tabs.length; j++) tabs[j].classList.remove('active');
+            for(var j = 0; j < tabs.length; j++) {
+                tabs[j].classList.remove('active');
+            }
 
             document.getElementById(pageId).classList.add('active');
             document.getElementById(btnId).classList.add('active');
 
-            if(pageId === 'pageAnalytics') renderAnalytics();
+            if(pageId === 'pageAnalytics') {
+                renderAnalytics();
+            }
         }
 
         function setMode(m) {
@@ -241,18 +261,43 @@
             document.getElementById('btnInc').className = 'sw-btn ' + (m === 'inc' ? 'active inc' : '');
         }
 
+        function checkCategory() {
+            var cat = document.getElementById('tCat').value;
+            var customGroup = document.getElementById('customCatGroup');
+            if(cat === 'Boshqa') {
+                customGroup.style.display = 'flex';
+            } else {
+                customGroup.style.display = 'none';
+            }
+        }
+
         function addTransaction() {
             var name = document.getElementById('tName').value;
             var amount = parseFloat(document.getElementById('tAmount').value);
+            var catSelect = document.getElementById('tCat').value;
+            var cat = catSelect;
+
+            if(catSelect === 'Boshqa') {
+                var customCat = document.getElementById('tCustomCat').value.trim();
+                if(customCat) {
+                    cat = "📦 " + customCat;
+                }
+            }
 
             if(!name || !amount || amount <= 0) {
-                alert("Ma'lumotlarni kiriting!");
+                alert("Maydonlarni to'liq to'ldiring");
                 return;
             }
 
-            transactions.unshift({ id: Date.now(), name: name, amount: amount, type: mode, date: new Date().toLocaleDateString() });
+            transactions.unshift({
+                id: Date.now(), name: name, amount: amount, cat: cat, type: mode, date: new Date().toLocaleDateString()
+            });
+
             document.getElementById('tName').value = '';
             document.getElementById('tAmount').value = '';
+            document.getElementById('tCustomCat').value = '';
+            document.getElementById('tCat').value = 'Oziq-ovqat';
+            checkCategory();
             safeSave();
         }
 
@@ -261,134 +306,96 @@
             var amount = parseFloat(document.getElementById('dAmount').value);
             var type = document.getElementById('dType').value;
 
-            if(!name || !amount || amount <= 0) {
-                alert("Qarz ma'lumotlarini kiriting!");
-                return;
+            if(!name || !amount || amount <= 0) { 
+                alert("To'liq kiriting"); 
+                return; 
             }
-
             debts.unshift({ id: Date.now(), name: name, amount: amount, type: type });
             document.getElementById('dName').value = '';
             document.getElementById('dAmount').value = '';
             safeSave();
         }
 
-        function addReminder() {
-            var title = document.getElementById('rTitle').value;
-            var timeVal = document.getElementById('rTime').value;
-
-            if(!title || !timeVal) {
-                alert("Eslatma ma'lumotlarini kiriting!");
-                return;
-            }
-
-            reminders.push({ id: Date.now(), title: title, time: timeVal });
-            document.getElementById('rTitle').value = '';
-            document.getElementById('rTime').value = '';
-            safeSave();
-            alert("Eslatma saqlandi!");
-        }
-
-        function reqNotif() {
-            if ("Notification" in window) {
-                Notification.requestPermission().then(function(p) {
-                    alert(p === "granted" ? "Ruxsat berildi" : "Ruxsat berilmadi");
-                });
-            } else {
-                alert("Brauzeringiz bildirishnomani qo'llab-quvvatlamaydi");
-            }
-        }
-
-        function saveLimit() {
-            limit = parseFloat(document.getElementById('budgetLimit').value) || 0;
-            safeSave();
-            alert("Limit saqlandi");
-        }
-
         function clearData() {
-            if(confirm("Ma'lumotlarni o'chirmoqchimisiz?")) {
-                localStorage.removeItem('capixy_db_v2');
-                transactions = []; debts = []; reminders = []; limit = 0;
+            if(confirm("Barcha ma'lumotlarni o'chirib tashlamoqchimisiz?")) {
+                localStorage.removeItem('acode_capixy_db');
+                transactions = []; 
+                debts = []; 
+                currentTheme = 'dark';
                 safeSave();
+                alert("Ma'lumotlar tozalandi!");
             }
         }
 
-        function exportData() {
-            var str = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify({ t: transactions, d: debts, r: reminders, l: limit }));
-            var a = document.createElement('a');
-            a.href = str;
-            a.download = "capixy_backup.json";
-            a.click();
+        function delTrans(id) { 
+            transactions = transactions.filter(function(t){ return t.id !== id; }); 
+            safeSave(); 
         }
 
-        function delTrans(id) {
-            transactions = transactions.filter(function(t){ return t.id !== id; });
-            safeSave();
-        }
-
-        function delDebt(id) {
-            debts = debts.filter(function(d){ return d.id !== id; });
-            safeSave();
-        }
-
-        function delReminder(id) {
-            reminders = reminders.filter(function(r){ return r.id !== id; });
-            safeSave();
+        function delDebt(id) { 
+            debts = debts.filter(function(d){ return d.id !== id; }); 
+            safeSave(); 
         }
 
         function renderAll() {
             var inc = 0, exp = 0;
-            for(var i=0; i<transactions.length; i++) {
+            for(var i = 0; i < transactions.length; i++) {
                 if(transactions[i].type === 'inc') inc += transactions[i].amount;
                 else exp += transactions[i].amount;
             }
             var bal = inc - exp;
 
-            document.getElementById('uiBalance').innerText = bal.toLocaleString() + " UZS";
-            document.getElementById('uiIncome').innerText = "+" + inc.toLocaleString() + " UZS";
-            document.getElementById('uiExpense').innerText = "-" + exp.toLocaleString() + " UZS";
+            document.getElementById('uiBalance').innerText = bal.toLocaleString() + " so'm";
+            document.getElementById('uiIncome').innerText = "+" + inc.toLocaleString();
+            document.getElementById('uiExpense').innerText = "-" + exp.toLocaleString();
+
+            var q = document.getElementById('searchBox') ? document.getElementById('searchBox').value.toLowerCase() : '';
+            var filtered = transactions.filter(function(t) {
+                return t.name.toLowerCase().includes(q) || t.cat.toLowerCase().includes(q);
+            });
 
             var tHtml = '';
-            if(transactions.length === 0) tHtml = '<div style="text-align:center; font-size:11px; color:#64748b;">Ro\'yxat bo\'sh</div>';
-            for(var j=0; j<transactions.length; j++) {
-                var item = transactions[j];
-                tHtml += '<div class="item-row"><div><div class="item-title">' + item.name + '</div><div class="item-sub">' + item.date + '</div></div><div class="item-right"><div class="item-val ' + item.type + '">' + (item.type==='inc'?'+':'-') + item.amount.toLocaleString() + ' UZS</div><button class="del-btn" onclick="delTrans(' + item.id + ')">✕</button></div></div>';
+            if(filtered.length === 0) tHtml = '<div style="text-align:center; font-size:10px; color:#8b949e;">Topilmadi</div>';
+            for(var j = 0; j < filtered.length; j++) {
+                var item = filtered[j];
+                tHtml += '<div class="item-row"><div><div><b>' + item.name + '</b> <span style="font-size:9px; color:#58a6ff;">(' + item.cat + ')</span></div><div class="item-sub">' + item.date + '</div></div><div><span class="' + item.type + '">' + (item.type==='inc'?'+':'-') + item.amount.toLocaleString() + ' so\'m</span><button class="del-btn" onclick="delTrans(' + item.id + ')">✕</button></div></div>';
             }
             document.getElementById('transList').innerHTML = tHtml;
 
             var dHtml = '';
-            if(debts.length === 0) dHtml = '<div style="text-align:center; font-size:11px; color:#64748b;">Qarzlar yo\'q</div>';
-            for(var k=0; k<debts.length; k++) {
+            for(var k = 0; k < debts.length; k++) {
                 var d = debts[k];
-                dHtml += '<div class="item-row"><div><div class="item-title">' + d.name + '</div><div class="item-sub">' + (d.type==='give'?'Menga berishi kerak':'Men berishim kerak') + '</div></div><div class="item-right"><div class="item-val ' + (d.type==='give'?'inc':'exp') + '">' + d.amount.toLocaleString() + ' UZS</div><button class="del-btn" onclick="delDebt(' + d.id + ')">✕</button></div></div>';
+                dHtml += '<div class="item-row"><div><div><b>' + d.name + '</b></div><div class="item-sub">' + (d.type==='give'?'Menga berishi kerak':'Men berishim kerak') + '</div></div><div><span class="' + (d.type==='give'?'inc':'exp') + '">' + d.amount.toLocaleString() + ' so\'m</span><button class="del-btn" onclick="delDebt(' + d.id + ')">✕</button></div></div>';
             }
-            document.getElementById('debtList').innerHTML = dHtml;
-
-            var rHtml = '';
-            if(reminders.length === 0) rHtml = '<div style="text-align:center; font-size:11px; color:#64748b;">Eslatmalar yo\'q</div>';
-            for(var m=0; m<reminders.length; m++) {
-                var r = reminders[m];
-                rHtml += '<div class="item-row"><div><div class="item-title">' + r.title + '</div><div class="item-sub">' + r.time + '</div></div><div class="item-right"><button class="del-btn" onclick="delReminder(' + r.id + ')">✕</button></div></div>';
-            }
-            document.getElementById('reminderList').innerHTML = rHtml;
+            document.getElementById('debtList').innerHTML = dHtml || '<div style="text-align:center; font-size:10px; color:#8b949e;">Bo\'sh</div>';
         }
 
         function renderAnalytics() {
-            var exp = 0;
-            for(var i=0; i<transactions.length; i++) {
-                if(transactions[i].type === 'exp') exp += transactions[i].amount;
+            var catMap = {};
+            var totalExp = 0;
+            for(var i = 0; i < transactions.length; i++) {
+                if(transactions[i].type === 'exp') {
+                    var c = transactions[i].cat;
+                    catMap[c] = (catMap[c] || 0) + transactions[i].amount;
+                    totalExp += transactions[i].amount;
+                }
             }
-            var txt = 'Jami xarajat: <b>' + exp.toLocaleString() + ' UZS</b><br>';
-            if(limit > 0) {
-                var pct = Math.round((exp / limit) * 100);
-                txt += 'Belgilangan limit: <b>' + limit.toLocaleString() + ' UZS</b><br>Ishlatildi: <b>' + pct + '%</b>';
+
+            var html = '';
+            if(totalExp === 0) {
+                html = '<div style="text-align:center; font-size:10px; color:#8b949e;">Chiqimlar mavjud emas</div>';
             } else {
-                txt += 'Limit belgilanmagan.';
+                for(var cat in catMap) {
+                    var sum = catMap[cat];
+                    var percent = Math.round((sum / totalExp) * 100);
+                    html += '<div class="cat-bar-item"><div>' + cat + ': ' + sum.toLocaleString() + ' so\'m (' + percent + '%)</div><div class="cat-bar-bg"><div class="cat-bar-fill" style="width:' + percent + '%;"></div></div></div>';
+                }
             }
-            document.getElementById('analyticsText').innerHTML = txt;
+            document.getElementById('analyticsBars').innerHTML = html;
         }
 
-        // Dastlabki yuklanish
         safeLoad();
     </script>
 </body>
-</html>
+    </html>
+    
