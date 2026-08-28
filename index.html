@@ -4,59 +4,21 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Capixy Wallet</title>
-    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'><rect width='512' height='512' rx='100' fill='%23090d16'/><path d='M160 160h192v192H160z' fill='%236366f1'/><circle cx='256' cy='256' r='60' fill='%2334d399'/></svg>">
-<link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'><rect width='512' height='512' rx='100' fill='%23090d16'/><path d='M160 160h192v192H160z' fill='%236366f1'/><circle cx='256' cy='256' r='60' fill='%2334d399'/></svg>">
-    <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#090d16">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            -webkit-tap-highlight-color: transparent;
-        }
-
-        body {
-            background-color: #090d16;
-            color: #f8fafc;
-            padding: 20px 16px;
-            display: flex;
-            justify-content: center;
-        }
-
-        .app-container {
-            width: 100%;
-            max-width: 420px;
-            display: flex;
-            flex-direction: column;
-            gap: 16px;
-        }
-
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Plus Jakarta Sans', sans-serif; -webkit-tap-highlight-color: transparent; }
+        body { background-color: #090d16; color: #f8fafc; padding: 20px 16px; display: flex; justify-content: center; }
+        .app-container { width: 100%; max-width: 420px; display: flex; flex-direction: column; gap: 16px; }
+        .header { display: flex; justify-content: space-between; align-items: center; }
         .brand h1 { font-size: 20px; font-weight: 700; color: #fff; }
         .brand p { font-size: 11px; color: #64748b; }
-        
-        .reset-btn {
-            background: #1e293b; border: 1px solid rgba(255,255,255,0.1);
-            color: #ef4444; width: 36px; height: 36px; border-radius: 10px;
-            font-size: 16px; cursor: pointer;
-        }
+        .reset-btn { background: #1e293b; border: 1px solid rgba(255,255,255,0.1); color: #ef4444; width: 36px; height: 36px; border-radius: 10px; font-size: 16px; cursor: pointer; }
 
-        .balance-card {
-            background: linear-gradient(135deg, #1e1b4b 0%, #0f172a 100%);
-            border: 1px solid rgba(99, 102, 241, 0.25);
-            padding: 20px; border-radius: 20px;
-        }
+        .balance-card { background: linear-gradient(135deg, #1e1b4b 0%, #0f172a 100%); border: 1px solid rgba(99, 102, 241, 0.25); padding: 20px; border-radius: 20px; }
         .bal-title { font-size: 11px; color: #94a3b8; text-transform: uppercase; font-weight: 600; }
         .bal-value { font-size: 28px; font-weight: 700; color: #fff; margin: 4px 0 12px 0; }
-        
         .stats { display: flex; gap: 10px; border-top: 1px solid rgba(255,255,255,0.08); padding-top: 10px; }
         .stat-box { flex: 1; }
         .stat-lbl { font-size: 10px; color: #64748b; }
@@ -64,58 +26,34 @@
         .stat-val.inc { color: #34d399; }
         .stat-val.exp { color: #f87171; }
 
-        .nav-tabs {
-            display: flex; background: #0f172a; padding: 4px;
-            border-radius: 14px; border: 1px solid rgba(255,255,255,0.05);
-        }
-        .tab-btn {
-            flex: 1; padding: 10px 0; border: none; background: transparent;
-            color: #64748b; font-size: 12px; font-weight: 600; border-radius: 10px;
-            cursor: pointer; text-align: center; transition: 0.2s;
-        }
+        .nav-tabs { display: flex; background: #0f172a; padding: 4px; border-radius: 14px; border: 1px solid rgba(255,255,255,0.05); overflow-x: auto; }
+        .tab-btn { flex: 1; padding: 10px 4px; border: none; background: transparent; color: #64748b; font-size: 11px; font-weight: 600; border-radius: 10px; cursor: pointer; text-align: center; white-space: nowrap; }
         .tab-btn.active { background: #1e293b; color: #fff; }
 
-        .glass-box {
-            background: rgba(30, 41, 59, 0.4);
-            border: 1px solid rgba(255,255,255,0.05);
-            border-radius: 18px; padding: 16px;
-            display: flex; flex-direction: column; gap: 12px;
-        }
+        .glass-box { background: rgba(30, 41, 59, 0.4); border: 1px solid rgba(255,255,255,0.05); border-radius: 18px; padding: 16px; display: flex; flex-direction: column; gap: 12px; }
         .box-title { font-size: 13px; font-weight: 600; color: #cbd5e1; }
 
         .type-switch { display: flex; background: #0f172a; padding: 3px; border-radius: 10px; gap: 4px; }
-        .sw-btn {
-            flex: 1; border: none; background: transparent; padding: 6px;
-            font-size: 11px; font-weight: 600; color: #64748b; border-radius: 8px; cursor: pointer;
-        }
+        .sw-btn { flex: 1; border: none; background: transparent; padding: 6px; font-size: 11px; font-weight: 600; color: #64748b; border-radius: 8px; cursor: pointer; }
         .sw-btn.active.exp { background: rgba(248, 113, 113, 0.2); color: #f87171; }
         .sw-btn.active.inc { background: rgba(52, 211, 153, 0.2); color: #34d399; }
 
         .input-group { display: flex; flex-direction: column; gap: 4px; }
         .input-group label { font-size: 10px; color: #64748b; font-weight: 600; text-transform: uppercase; }
-        .input-field {
-            background: #0f172a; border: 1px solid rgba(255,255,255,0.08);
-            padding: 10px 12px; border-radius: 10px; color: #fff; font-size: 13px; outline: none;
-        }
+        .input-field { background: #0f172a; border: 1px solid rgba(255,255,255,0.08); padding: 10px 12px; border-radius: 10px; color: #fff; font-size: 13px; outline: none; }
 
-        .submit-btn {
-            background: #6366f1; color: #fff; border: none; padding: 12px;
-            border-radius: 10px; font-weight: 600; font-size: 13px; cursor: pointer;
-        }
+        .submit-btn { background: #6366f1; color: #fff; border: none; padding: 12px; border-radius: 10px; font-weight: 600; font-size: 13px; cursor: pointer; }
+        .notif-btn { background: #10b981; color: #fff; border: none; padding: 10px; border-radius: 10px; font-weight: 600; font-size: 12px; cursor: pointer; width: 100%; }
 
         .item-list { display: flex; flex-direction: column; gap: 8px; max-height: 220px; overflow-y: auto; }
-        .item-row {
-            background: rgba(15, 23, 42, 0.6); padding: 10px 12px; border-radius: 12px;
-            display: flex; justify-content: space-between; align-items: center;
-        }
-        .item-left { display: flex; align-items: center; gap: 10px; }
+        .item-row { background: rgba(15, 23, 42, 0.6); padding: 10px 12px; border-radius: 12px; display: flex; justify-content: space-between; align-items: center; }
         .item-title { font-size: 12px; font-weight: 600; color: #f1f5f9; }
         .item-sub { font-size: 9px; color: #64748b; }
         .item-right { display: flex; align-items: center; gap: 8px; }
         .item-val { font-size: 12px; font-weight: 700; }
         .item-val.inc { color: #34d399; }
         .item-val.exp { color: #f87171; }
-        .del-btn { background: none; border: none; color: #475569; cursor: pointer; font-size: 12px; }
+        .del-btn { background: none; border: none; color: #ef4444; cursor: pointer; font-size: 14px; padding: 4px 8px; }
 
         .section-page { display: none; flex-direction: column; gap: 16px; }
         .section-page.active { display: flex; }
@@ -129,7 +67,7 @@
                 <h1>Capixy</h1>
                 <p>Smart Money Manager</p>
             </div>
-            <button class="reset-btn" onclick="clearData()" title="Tozalash">↺</button>
+            <button class="reset-btn" id="btnReset">↺</button>
         </div>
 
         <div class="balance-card">
@@ -148,17 +86,19 @@
         </div>
 
         <div class="nav-tabs">
-            <button class="tab-btn active" onclick="switchTab('main', this)">Asosiy</button>
-            <button class="tab-btn" onclick="switchTab('debts', this)">Qarzlar</button>
-            <button class="tab-btn" onclick="switchTab('analytics', this)">Tahlil</button>
-            <button class="tab-btn" onclick="switchTab('settings', this)">Sozlamalar</button>
+            <button class="tab-btn active" id="tabMain">Asosiy</button>
+            <button class="tab-btn" id="tabReminders">Eslatmalar</button>
+            <button class="tab-btn" id="tabDebts">Qarzlar</button>
+            <button class="tab-btn" id="tabAnalytics">Tahlil</button>
+            <button class="tab-btn" id="tabSettings">Sozlamalar</button>
         </div>
 
+        <!-- ASOSIY -->
         <div id="pageMain" class="section-page active">
             <div class="glass-box">
                 <div class="type-switch">
-                    <button class="sw-btn active exp" id="btnExp" onclick="setMode('exp')">Chiqim (-)</button>
-                    <button class="sw-btn inc" id="btnInc" onclick="setMode('inc')">Kirim (+)</button>
+                    <button class="sw-btn active exp" id="btnExp">Chiqim (-)</button>
+                    <button class="sw-btn inc" id="btnInc">Kirim (+)</button>
                 </div>
                 <div class="input-group">
                     <label>Nomi</label>
@@ -168,7 +108,7 @@
                     <label>Summa (UZS)</label>
                     <input type="number" id="tAmount" class="input-field" placeholder="0">
                 </div>
-                <button class="submit-btn" onclick="addTransaction()">Qo'shish</button>
+                <button class="submit-btn" id="btnAddTrans">Qo'shish</button>
             </div>
 
             <div class="glass-box">
@@ -177,6 +117,30 @@
             </div>
         </div>
 
+        <!-- ESLATMALAR -->
+        <div id="pageReminders" class="section-page">
+            <div class="glass-box">
+                <button class="notif-btn" id="btnReqNotif">🔔 Bildirishnoma ruxsatini berish</button>
+            </div>
+            <div class="glass-box">
+                <div class="box-title">Yangi Eslatma</div>
+                <div class="input-group">
+                    <label>Eslatma Matni</label>
+                    <input type="text" id="rTitle" class="input-field" placeholder="Masalan: Kommunal to'lov">
+                </div>
+                <div class="input-group">
+                    <label>Vaqti</label>
+                    <input type="datetime-local" id="rTime" class="input-field">
+                </div>
+                <button class="submit-btn" id="btnAddReminder">Eslatmani Saqlash</button>
+            </div>
+            <div class="glass-box">
+                <div class="box-title">Eslatmalar Ro'yxati</div>
+                <div class="item-list" id="reminderList"></div>
+            </div>
+        </div>
+
+        <!-- QARZLAR -->
         <div id="pageDebts" class="section-page">
             <div class="glass-box">
                 <div class="box-title">Yangi Qarz</div>
@@ -195,15 +159,15 @@
                         <option value="take">Oldim (Men berishim kerak)</option>
                     </select>
                 </div>
-                <button class="submit-btn" onclick="addDebt()">Qarzni Saqlash</button>
+                <button class="submit-btn" id="btnAddDebt">Qarzni Saqlash</button>
             </div>
-
             <div class="glass-box">
                 <div class="box-title">Qarzlar Ro'yxati</div>
                 <div class="item-list" id="debtList"></div>
             </div>
         </div>
 
+        <!-- TAHLIL -->
         <div id="pageAnalytics" class="section-page">
             <div class="glass-box">
                 <div class="box-title">Oylik Limit Sozlash</div>
@@ -211,7 +175,7 @@
                     <label>Limit Summasi</label>
                     <input type="number" id="budgetLimit" class="input-field" placeholder="0">
                 </div>
-                <button class="submit-btn" onclick="saveLimit()">Limitni Saqlash</button>
+                <button class="submit-btn" id="btnSaveLimit">Limitni Saqlash</button>
             </div>
             <div class="glass-box">
                 <div class="box-title">Xulosa</div>
@@ -219,209 +183,213 @@
             </div>
         </div>
 
+        <!-- SOZLAMALAR -->
         <div id="pageSettings" class="section-page">
             <div class="glass-box">
                 <div class="box-title">Tizim Sozlamalari</div>
-                <button class="submit-btn" style="background:#334155; margin-bottom:8px;" onclick="exportData()">📥 Zaxira faylini yuklab olish</button>
-                <button class="submit-btn" style="background:#ef4444;" onclick="clearData()">🗑 Barcha ma'lumotlarni o'chirish</button>
-            </div>
-            <div class="glass-box">
-                <div class="box-title">Ilova haqida</div>
-                <p style="font-size: 11px; color: #64748b;">Capixy v1.0 Pro. Barcha ma'lumotlar qurilmangizda saqlanadi.</p>
+                <button class="submit-btn" id="btnExport" style="background:#334155; margin-bottom:8px;">📥 Zaxira faylini yuklab olish</button>
+                <button class="submit-btn" id="btnClear" style="background:#ef4444;">🗑 Barcha ma'lumotlarni o'chirish</button>
             </div>
         </div>
     </div>
 
     <script>
-        let mode = 'exp';
-        let transactions = [];
-        let debts = [];
-        let limit = 0;
+        window.addEventListener('load', function() {
+            var mode = 'exp';
+            var transactions = [];
+            var debts = [];
+            var reminders = [];
+            var limit = 0;
 
-        function switchTab(tabName, btnElement) {
-            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-            btnElement.classList.add('active');
-            document.querySelectorAll('.section-page').forEach(page => page.classList.remove('active'));
-
-            if(tabName === 'main') document.getElementById('pageMain').classList.add('active');
-            if(tabName === 'debts') document.getElementById('pageDebts').classList.add('active');
-            if(tabName === 'analytics') {
-                document.getElementById('pageAnalytics').classList.add('active');
-                renderAnalytics();
-            }
-            if(tabName === 'settings') document.getElementById('pageSettings').classList.add('active');
-        }
-
-        function setMode(newMode) {
-            mode = newMode;
-            document.getElementById('btnExp').className = `sw-btn ${mode === 'exp' ? 'active exp' : ''}`;
-            document.getElementById('btnInc').className = `sw-btn ${mode === 'inc' ? 'active inc' : ''}`;
-        }
-
-        function addTransaction() {
-            const name = document.getElementById('tName').value.trim();
-            const amount = parseFloat(document.getElementById('tAmount').value);
-
-            if(!name || !amount || amount <= 0) {
-                alert("Iltimos, ism va summani to'g'ri kiriting!");
-                return;
+            function safeSave() {
+                try {
+                    localStorage.setItem('capixy_db', JSON.stringify({
+                        t: transactions,
+                        d: debts,
+                        r: reminders,
+                        l: limit
+                    }));
+                } catch(e) {}
+                renderAll();
             }
 
-            transactions.unshift({
-                id: Date.now(),
-                name: name,
-                amount: amount,
-                type: mode,
-                date: new Date().toLocaleDateString()
-            });
-
-            document.getElementById('tName').value = '';
-            document.getElementById('tAmount').value = '';
-            saveAndRender();
-        }
-
-        function deleteTrans(id) {
-            transactions = transactions.filter(t => t.id !== id);
-            saveAndRender();
-        }
-
-        function addDebt() {
-            const name = document.getElementById('dName').value.trim();
-            const amount = parseFloat(document.getElementById('dAmount').value);
-            const type = document.getElementById('dType').value;
-
-            if(!name || !amount || amount <= 0) {
-                alert("Qarz ma'lumotlarini to'liq kiriting!");
-                return;
+            function safeLoad() {
+                try {
+                    var data = localStorage.getItem('capixy_db');
+                    if(data) {
+                        var p = JSON.parse(data);
+                        transactions = p.t || [];
+                        debts = p.d || [];
+                        reminders = p.r || [];
+                        limit = p.l || 0;
+                        document.getElementById('budgetLimit').value = limit || '';
+                    }
+                } catch(e) {}
+                renderAll();
             }
 
-            debts.unshift({ id: Date.now(), name: name, amount: amount, type: type });
-            document.getElementById('dName').value = '';
-            document.getElementById('dAmount').value = '';
-            saveAndRender();
-        }
+            function showTab(pageId, btnId) {
+                var pages = document.querySelectorAll('.section-page');
+                for(var i=0; i<pages.length; i++) pages[i].classList.remove('active');
+                
+                var tabs = document.querySelectorAll('.tab-btn');
+                for(var j=0; j<tabs.length; j++) tabs[j].classList.remove('active');
 
-        function deleteDebt(id) {
-            debts = debts.filter(d => d.id !== id);
-            saveAndRender();
-        }
+                document.getElementById(pageId).classList.add('active');
+                document.getElementById(btnId).classList.add('active');
 
-        function saveLimit() {
-            limit = parseFloat(document.getElementById('budgetLimit').value) || 0;
-            saveAndRender();
-            alert("Limit saqlandi!");
-        }
-
-        function exportData() {
-            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify({ transactions, debts, limit }));
-            const dlAnchor = document.createElement('a');
-            dlAnchor.setAttribute("href", dataStr);
-            dlAnchor.setAttribute("download", "capixy_backup.json");
-            document.body.appendChild(dlAnchor);
-            dlAnchor.click();
-            dlAnchor.remove();
-        }
-
-        function saveAndRender() {
-            localStorage.setItem('capixy_data', JSON.stringify({ transactions, debts, limit }));
-            render();
-        }
-
-        function loadData() {
-            const data = localStorage.getItem('capixy_data');
-            if(data) {
-                const parsed = JSON.parse(data);
-                transactions = parsed.transactions || [];
-                debts = parsed.debts || [];
-                limit = parsed.limit || 0;
-                document.getElementById('budgetLimit').value = limit || '';
-            }
-            render();
-        }
-
-        function render() {
-            let incTotal = transactions.filter(t => t.type === 'inc').reduce((a, b) => a + b.amount, 0);
-            let expTotal = transactions.filter(t => t.type === 'exp').reduce((a, b) => a + b.amount, 0);
-            let total = incTotal - expTotal;
-
-            document.getElementById('uiBalance').innerText = total.toLocaleString() + " UZS";
-            document.getElementById('uiIncome').innerText = "+" + incTotal.toLocaleString() + " UZS";
-            document.getElementById('uiExpense').innerText = "-" + expTotal.toLocaleString() + " UZS";
-
-            const tList = document.getElementById('transList');
-            if(transactions.length === 0) {
-                tList.innerHTML = '<div style="text-align:center; font-size:11px; color:#64748b;">Ro\'yxat bo\'sh</div>';
-            } else {
-                tList.innerHTML = transactions.map(t => `
-                    <div class="item-row">
-                        <div class="item-left">
-                            <div>
-                                <div class="item-title">${t.name}</div>
-                                <div class="item-sub">${t.date}</div>
-                            </div>
-                        </div>
-                        <div class="item-right">
-                            <div class="item-val ${t.type}">
-                                ${t.type === 'inc' ? '+' : '-'}${t.amount.toLocaleString()} UZS
-                            </div>
-                            <button class="del-btn" onclick="deleteTrans(${t.id})">✕</button>
-                        </div>
-                    </div>
-                `).join('');
+                if(pageId === 'pageAnalytics') renderAnalytics();
             }
 
-            const dList = document.getElementById('debtList');
-            if(debts.length === 0) {
-                dList.innerHTML = '<div style="text-align:center; font-size:11px; color:#64748b;">Qarzlar yo\'q</div>';
-            } else {
-                dList.innerHTML = debts.map(d => `
-                    <div class="item-row">
-                        <div class="item-left">
-                            <div>
-                                <div class="item-title">${d.name}</div>
-                                <div class="item-sub">${d.type === 'give' ? 'Menga berishi kerak' : 'Men berishim kerak'}</div>
-                            </div>
-                        </div>
-                        <div class="item-right">
-                            <div class="item-val ${d.type === 'give' ? 'inc' : 'exp'}">
-                                ${d.amount.toLocaleString()} UZS
-                            </div>
-                            <button class="del-btn" onclick="deleteDebt(${d.id})">✕</button>
-                        </div>
-                    </div>
-                `).join('');
+            document.getElementById('tabMain').onclick = function() { showTab('pageMain', 'tabMain'); };
+            document.getElementById('tabReminders').onclick = function() { showTab('pageReminders', 'tabReminders'); };
+            document.getElementById('tabDebts').onclick = function() { showTab('pageDebts', 'tabDebts'); };
+            document.getElementById('tabAnalytics').onclick = function() { showTab('pageAnalytics', 'tabAnalytics'); };
+            document.getElementById('tabSettings').onclick = function() { showTab('pageSettings', 'tabSettings'); };
+
+            document.getElementById('btnExp').onclick = function() {
+                mode = 'exp';
+                this.className = 'sw-btn active exp';
+                document.getElementById('btnInc').className = 'sw-btn inc';
+            };
+
+            document.getElementById('btnInc').onclick = function() {
+                mode = 'inc';
+                this.className = 'sw-btn active inc';
+                document.getElementById('btnExp').className = 'sw-btn exp';
+            };
+
+            document.getElementById('btnAddTrans').onclick = function() {
+                var name = document.getElementById('tName').value;
+                var amount = parseFloat(document.getElementById('tAmount').value);
+
+                if(!name || !amount || amount <= 0) {
+                    alert("Ma'lumotlarni to'liq kiriting");
+                    return;
+                }
+
+                transactions.unshift({
+                    id: Date.now(),
+                    name: name,
+                    amount: amount,
+                    type: mode,
+                    date: new Date().toLocaleDateString()
+                });
+
+                document.getElementById('tName').value = '';
+                document.getElementById('tAmount').value = '';
+                safeSave();
+            };
+
+            document.getElementById('btnAddDebt').onclick = function() {
+                var name = document.getElementById('dName').value;
+                var amount = parseFloat(document.getElementById('dAmount').value);
+                var type = document.getElementById('dType').value;
+
+                if(!name || !amount || amount <= 0) {
+                    alert("Qarz ma'lumotlarini to'liq kiriting");
+                    return;
+                }
+
+                debts.unshift({ id: Date.now(), name: name, amount: amount, type: type });
+                document.getElementById('dName').value = '';
+                document.getElementById('dAmount').value = '';
+                safeSave();
+            };
+
+            document.getElementById('btnAddReminder').onclick = function() {
+                var title = document.getElementById('rTitle').value;
+                var timeVal = document.getElementById('rTime').value;
+
+                if(!title || !timeVal) {
+                    alert("Eslatmani to'liq kiriting");
+                    return;
+                }
+
+                reminders.push({ id: Date.now(), title: title, time: timeVal });
+                document.getElementById('rTitle').value = '';
+                document.getElementById('rTime').value = '';
+                safeSave();
+                alert("Eslatma saqlandi");
+            };
+
+            document.getElementById('btnReqNotif').onclick = function() {
+                if ("Notification" in window) {
+                    Notification.requestPermission().then(function(p) {
+                        alert(p === "granted" ? "Ruxsat berildi" : "Ruxsat berilmadi");
+                    });
+                } else {
+                    alert("Bildirishnoma qo'llab-quvvatlanmaydi");
+                }
+            };
+
+            document.getElementById('btnSaveLimit').onclick = function() {
+                limit = parseFloat(document.getElementById('budgetLimit').value) || 0;
+                safeSave();
+                alert("Limit saqlandi");
+            };
+
+            document.getElementById('btnReset').onclick = clearData;
+            document.getElementById('btnClear').onclick = clearData;
+
+            function clearData() {
+                if(confirm("Tozalashni xohlaysizmi?")) {
+                    localStorage.removeItem('capixy_db');
+                    transactions = []; debts = []; reminders = []; limit = 0;
+                    safeSave();
+                }
             }
-        }
 
-        function renderAnalytics() {
-            let expTotal = transactions.filter(t => t.type === 'exp').reduce((a, b) => a + b.amount, 0);
-            let box = document.getElementById('analyticsText');
-            
-            let text = `Jami xarajat: <b>${expTotal.toLocaleString()} UZS</b><br>`;
-            if(limit > 0) {
-                let pct = Math.round((expTotal / limit) * 100);
-                text += `Belgilangan limit: <b>${limit.toLocaleString()} UZS</b><br>`;
-                text += `Ishlatildi: <b>${pct}%</b>`;
-            } else {
-                text += `Oylik limit belgilanmagan.`;
+            document.getElementById('btnExport').onclick = function() {
+                var str = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify({ t: transactions, d: debts, r: reminders, l: limit }));
+                var a = document.createElement('a');
+                a.href = str;
+                a.download = "capixy_backup.json";
+                a.click();
+            };
+
+            function renderAll() {
+                var inc = 0, exp = 0;
+                for(var i=0; i<transactions.length; i++) {
+                    if(transactions[i].type === 'inc') inc += transactions[i].amount;
+                    else exp += transactions[i].amount;
+                }
+                var bal = inc - exp;
+
+                document.getElementById('uiBalance').innerText = bal.toLocaleString() + " UZS";
+                document.getElementById('uiIncome').innerText = "+" + inc.toLocaleString() + " UZS";
+                document.getElementById('uiExpense').innerText = "-" + exp.toLocaleString() + " UZS";
+
+                // Trans List
+                var tHtml = '';
+                if(transactions.length === 0) tHtml = '<div style="text-align:center; font-size:11px; color:#64748b;">Ro\'yxat bo\'sh</div>';
+                for(var j=0; j<transactions.length; j++) {
+                    var item = transactions[j];
+                    tHtml += '<div class="item-row"><div><div class="item-title">' + item.name + '</div><div class="item-sub">' + item.date + '</div></div><div class="item-right"><div class="item-val ' + item.type + '">' + (item.type==='inc'?'+':'-') + item.amount.toLocaleString() + ' UZS</div><button class="del-btn" onclick="delTrans(' + item.id + ')">✕</button></div></div>';
+                }
+                document.getElementById('transList').innerHTML = tHtml;
+
+                // Debt List
+                var dHtml = '';
+                if(debts.length === 0) dHtml = '<div style="text-align:center; font-size:11px; color:#64748b;">Qarzlar yo\'q</div>';
+                for(var k=0; k<debts.length; k++) {
+                    var d = debts[k];
+                    dHtml += '<div class="item-row"><div><div class="item-title">' + d.name + '</div><div class="item-sub">' + (d.type==='give'?'Menga berishi kerak':'Men berishim kerak') + '</div></div><div class="item-right"><div class="item-val ' + (d.type==='give'?'inc':'exp') + '">' + d.amount.toLocaleString() + ' UZS</div><button class="del-btn" onclick="delDebt(' + d.id + ')">✕</button></div></div>';
+                }
+                document.getElementById('debtList').innerHTML = dHtml;
+
+                // Reminder List
+                var rHtml = '';
+                if(reminders.length === 0) rHtml = '<div style="text-align:center; font-size:11px; color:#64748b;">Eslatmalar yo\'q</div>';
+                for(var m=0; m<reminders.length; m++) {
+                    var r = reminders[m];
+                    rHtml += '<div class="item-row"><div><div class="item-title">' + r.title + '</div><div class="item-sub">' + r.time + '</div></div><div class="item-right"><button class="del-btn" onclick="delReminder(' + r.id + ')">✕</button></div></div>';
+                }
+                document.getElementById('reminderList').innerHTML = rHtml;
             }
-            box.innerHTML = text;
-        }
 
-        function clearData() {
-            if(confirm("Barcha ma'lumotlarni o'chirmoqchimisiz?")) {
-                localStorage.clear();
-                transactions = []; debts = []; limit = 0;
-                saveAndRender();
-            }
-        }
-
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('sw.js');
-        }
-
-        window.onload = loadData;
-    </script>
-</body>
-  </html>
-  
+            function renderAnalytics() {
+                var exp = 0;
+                for(var i=0; i<transactions.length; i++) {
+                    if(transactions[i].type === 'exp') exp += transactions[i].amount;
+   
