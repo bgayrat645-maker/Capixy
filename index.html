@@ -83,12 +83,15 @@
         .type-btn { flex: 1; padding: 8px; border-radius: 8px; border: none; background: transparent; color: var(--text); font-weight: 500; font-size: 13px; cursor: pointer; }
         .type-btn.active-chiqim { background: var(--chiqim); color: #fff; font-weight: 600; }
         .type-btn.active-kirim { background: var(--kirim); color: #fff; font-weight: 600; }
+        .type-btn.active-blue { background: var(--accent); color: #fff; font-weight: 600; }
 
         .inp { width: 100%; padding: 12px; background: rgba(120, 120, 128, 0.12); border: none; border-radius: 10px; color: var(--text); font-size: 14px; margin-bottom: 10px; outline: none; }
         .btn-main { width: 100%; padding: 12px; background: var(--accent); border: none; border-radius: 12px; color: #fff; font-weight: 600; font-size: 14px; cursor: pointer; }
 
         .item { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 0.5px solid var(--card-border); font-size: 13px; }
         .item:last-child { border-bottom: none; }
+
+        .action-link { font-size: 11px; font-weight: 600; cursor: pointer; margin-left: 8px; }
 
         .setting-item { display: flex; justify-content: space-between; align-items: center; padding: 12px 14px; background: rgba(120, 120, 128, 0.1); border-radius: 12px; cursor: pointer; font-size: 14px; margin-bottom: 8px; }
 
@@ -101,12 +104,14 @@
         .tab-btn.active { color: var(--accent); }
 
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0, 0, 0, 0.4); backdrop-filter: blur(10px); display: none; align-items: center; justify-content: center; z-index: 1000; }
-        .modal-card { background: var(--card-bg); border: 0.5px solid var(--card-border); border-radius: 20px; padding: 20px; width: 85%; max-width: 340px; }
+        .modal-card { background: var(--card-bg); border: 0.5px solid var(--card-border); border-radius: 20px; padding: 20px; width: 88%; max-width: 350px; }
+        
+        .currency-row { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 0.5px solid var(--card-border); font-size: 13px; }
+        .currency-row:last-child { border-bottom: none; }
     </style>
 </head>
 <body>
 
-<!-- PIN LOCK & BIOMETRIC SCREEN -->
 <div id="pin-lock-screen" style="display: none;">
     <h3 style="font-weight: 600; margin-bottom: 4px;">Capixy Lock</h3>
     <p style="font-size: 12px; color: var(--text-muted);">PIN-kod yoki Biometriya orqali kiring</p>
@@ -126,7 +131,7 @@
         <button class="num-btn" onclick="pressPin('7')">7</button>
         <button class="num-btn" onclick="pressPin('8')">8</button>
         <button class="num-btn" onclick="pressPin('9')">9</button>
-        <button class="num-btn" onclick="authenticateBiometric()" title="Face ID / Touch ID" style="color: var(--accent);">
+        <button class="num-btn" onclick="authenticateBiometric()" style="color: var(--accent);">
             <i class="fa-solid fa-fingerprint"></i>
         </button>
         <button class="num-btn" onclick="pressPin('0')">0</button>
@@ -142,7 +147,7 @@
             </button>
             <div class="label">Umumiy balans</div>
             <div class="balance-val" id="val-balance">0 so'm</div>
-            <div class="usd-val" id="val-usd">≈ $0.00 USD (Valyuta yuklanmoqda...)</div>
+            <div class="usd-val" id="val-usd">≈ $0.00 USD</div>
             <div class="stats-row">
                 <div>
                     <span class="label">Kirim</span><br>
@@ -176,7 +181,7 @@
             </div>
         </div>
 
-        <!-- 2. GRAFIK & ANALITIKA -->
+        <!-- 2. ANALITIKA -->
         <div class="tab-content" id="c2">
             <div class="glass">
                 <h3 style="font-size: 15px; font-weight: 600; margin-bottom: 12px;">Xarajatlar Tahlili 📊</h3>
@@ -186,7 +191,7 @@
             </div>
         </div>
 
-        <!-- 3. QARZLAR (DEADLINE) -->
+        <!-- 3. QARZLAR -->
         <div class="tab-content" id="c3">
             <div class="glass">
                 <div class="type-switcher">
@@ -198,8 +203,12 @@
                 <input type="date" id="qarz-deadline" class="inp" placeholder="Qaytarish sanasi (Deadline)">
                 <button class="btn-main" onclick="addQarz()">Saqlash</button>
             </div>
+
             <div class="glass">
-                <h3 style="font-size: 14px; font-weight: 600; margin-bottom: 8px;">Aktiv Qarzlar va Muddatlar ⏳</h3>
+                <div class="type-switcher" style="margin-bottom: 10px;">
+                    <button class="type-btn active-blue" id="qarz-view-active" onclick="setQarzView('active')">Aktiv Qarzlar</button>
+                    <button class="type-btn" id="qarz-view-history" onclick="setQarzView('history')">Qarzlar Tarixi</button>
+                </div>
                 <div id="qarz-list"></div>
             </div>
         </div>
@@ -209,18 +218,26 @@
             <div class="glass">
                 <h3 style="font-size: 15px; font-weight: 600; margin-bottom: 12px;">Sozlamalar ⚙️</h3>
                 
+                <div class="setting-item" onclick="openSettingModal('currency')">
+                    <span>💱 Valyuta kurslari (Markaziy Bank / Google)</span>
+                    <span style="opacity: 0.4;">›</span>
+                </div>
+
                 <div class="setting-item" onclick="openSettingModal('pin')">
                     <span>🔒 PIN & Biometriya (Face/Touch ID)</span>
                     <span style="opacity: 0.4;" id="pin-status-label">O'chiq ›</span>
                 </div>
+
                 <div class="setting-item" onclick="exportToCSV()">
                     <span>📄 CSV (Excel) Hisobot Yuklab Olish</span>
                     <span style="opacity: 0.4;">📥</span>
                 </div>
+
                 <div class="setting-item" onclick="openSettingModal('theme')">
                     <span>🎨 Mavzu (Dark / Light)</span>
                     <span style="opacity: 0.4;">›</span>
                 </div>
+
                 <div class="setting-item" style="color: var(--chiqim);" onclick="resetAll()">
                     <span>🗑️ Ma'lumotlarni o'chirish</span>
                     <span style="opacity: 0.4;">›</span>
@@ -248,9 +265,11 @@
 </div>
 
 <script>
-    var usdRate = 12800; // Zaxira (fallback) kurs
+    var usdRate = 12800;
+    var allRates = [];
     var selectedType = 'chiqim';
     var qarzType = 'berdim';
+    var currentQarzView = 'active';
     var currentTheme = localStorage.getItem('capixy_theme') || "dark";
     var isPrivacyMode = localStorage.getItem('capixy_privacy') === 'true';
     var userPin = localStorage.getItem('capixy_pin') || "";
@@ -261,6 +280,7 @@
 
     var historyData = JSON.parse(localStorage.getItem('capixy_hist')) || [];
     var qarzData = JSON.parse(localStorage.getItem('capixy_qarz')) || [];
+    var qarzHistoryData = JSON.parse(localStorage.getItem('capixy_qarz_hist')) || [];
     
     var categories = [
         { name: "Oziq-ovqat", icon: "🍔" },
@@ -285,53 +305,40 @@
     updateUI();
     updateQarzUI();
 
-    // Online Avto-Valyuta Kursini yuklash (Markaziy Bank API)
     function fetchLiveExchangeRate() {
-        fetch('https://cbu.uz/uz/arkhiv-kursov-valyut/json/USD/')
+        fetch('https://cbu.uz/uz/arkhiv-kursov-valyut/json/')
             .then(function(res) { return res.json(); })
             .then(function(data) {
-                if (data && data[0] && data[0].Rate) {
-                    usdRate = parseFloat(data[0].Rate);
+                if (data && data.length) {
+                    allRates = data;
+                    var usdObj = data.find(function(c) { return c.Ccy === 'USD'; });
+                    if (usdObj) usdRate = parseFloat(usdObj.Rate);
                     updateUI();
                 }
             })
-            .catch(function(err) {
-                console.log("Valyuta kursini olishda xatolik:", err);
-            });
+            .catch(function(err) { console.log("Valyuta kursida xatolik:", err); });
     }
 
     function checkPinLock() {
         if (userPin.length === 4) {
             document.getElementById('pin-lock-screen').style.display = 'flex';
-            // Agar biometriya mavjud bo'lsa avtomatik so'rash
             if (window.PublicKeyCredential) {
                 setTimeout(authenticateBiometric, 300);
             }
+        } else {
+            document.getElementById('pin-lock-screen').style.display = 'none';
         }
         document.getElementById('pin-status-label').innerText = userPin.length === 4 ? "Yoqilgan ›" : "O'chiq ›";
     }
 
-    // Biometrik (Face ID / Touch ID) bilan qulfdan chiqarish
     function authenticateBiometric() {
-        if (!window.PublicKeyCredential) {
-            alert("Qurilmangiz yoki brauzeringiz Face ID/Touch ID funksiyasini qo'llab-quvvatlamaydi.");
-            return;
-        }
-
-        // WebAuthn yordamida lokal biometrik autentifikatsiya simulyatsiyasi
+        if (!window.PublicKeyCredential) return;
         navigator.credentials.get({
-            publicKey: {
-                challenge: new Uint8Array(16),
-                timeout: 60000,
-                userVerification: "preferred"
-            }
-        }).then(function(credential) {
+            publicKey: { challenge: new Uint8Array(16), timeout: 60000, userVerification: "preferred" }
+        }).then(function() {
             document.getElementById('pin-lock-screen').style.display = 'none';
             enteredPin = "";
-        }).catch(function(err) {
-            // Parol/Biometriya bekor qilinganda yoki xatolikda PIN orqali kirish davom etadi
-            console.log("Biometriya tasdiqlanmadi, PIN ishlatilsin.");
-        });
+        }).catch(function(err) { console.log("Biometriya tasdiqlanmadi."); });
     }
 
     function pressPin(val) {
@@ -366,6 +373,7 @@
         localStorage.setItem('capixy_tc', totalChiqim);
         localStorage.setItem('capixy_hist', JSON.stringify(historyData));
         localStorage.setItem('capixy_qarz', JSON.stringify(qarzData));
+        localStorage.setItem('capixy_qarz_hist', JSON.stringify(qarzHistoryData));
         localStorage.setItem('capixy_theme', currentTheme);
         localStorage.setItem('capixy_privacy', isPrivacyMode);
         localStorage.setItem('capixy_pin', userPin);
@@ -383,6 +391,13 @@
         document.getElementById('qarz-btn-oldim').className = type === 'oldim' ? 'type-btn active-kirim' : 'type-btn';
     }
 
+    function setQarzView(view) {
+        currentQarzView = view;
+        document.getElementById('qarz-view-active').className = view === 'active' ? 'type-btn active-blue' : 'type-btn';
+        document.getElementById('qarz-view-history').className = view === 'history' ? 'type-btn active-blue' : 'type-btn';
+        updateQarzUI();
+    }
+
     function openTab(tabIndex) {
         for (var i = 1; i <= 4; i++) {
             document.getElementById('c' + i).classList.remove('active');
@@ -398,6 +413,7 @@
         isPrivacyMode = !isPrivacyMode;
         saveData();
         updateUI();
+        updateQarzUI();
     }
 
     function formatMoney(amount) {
@@ -452,7 +468,7 @@
     function updateUI() {
         var balance = totalKirim - totalChiqim;
         document.getElementById('val-balance').innerText = formatMoney(balance);
-        document.getElementById('val-usd').innerText = isPrivacyMode ? '≈ $•••• USD' : '≈ $' + (balance / usdRate).toFixed(2) + ' USD (1$ = ' + usdRate.toLocaleString() + " so'm)";
+        document.getElementById('val-usd').innerText = isPrivacyMode ? '≈ $•••• USD' : '≈ $' + (balance / usdRate).toFixed(2) + ' USD';
         document.getElementById('val-kirim').innerText = '+' + formatMoney(totalKirim);
         document.getElementById('val-chiqim').innerText = '-' + formatMoney(totalChiqim);
 
@@ -518,31 +534,107 @@
         updateQarzUI();
     }
 
+    function deleteQarz(id) {
+        qarzData = qarzData.filter(function(q) { return q.id !== id; });
+        saveData();
+        updateQarzUI();
+    }
+
+    function deleteQarzHistory(id) {
+        qarzHistoryData = qarzHistoryData.filter(function(q) { return q.id !== id; });
+        saveData();
+        updateQarzUI();
+    }
+
+    function qarzTolandi(id) {
+        var idx = qarzData.findIndex(function(q) { return q.id === id; });
+        if (idx !== -1) {
+            var q = qarzData[idx];
+            var todayStr = new Date().toLocaleDateString();
+            
+            var txType = q.type === 'berdim' ? 'kirim' : 'chiqim';
+            var txTitle = q.type === 'berdim' ? 'Qarz qaytdi: ' + q.name : 'Qarz to\'landi: ' + q.name;
+
+            if (txType === 'kirim') totalKirim += q.sum;
+            else totalChiqim += q.sum;
+
+            // Qarzlar bo'limining o'zidagi Tarixga saqlash
+            qarzHistoryData.unshift({
+                id: Date.now(),
+                name: q.name,
+                sum: q.sum,
+                type: q.type,
+                paidDate: todayStr
+            });
+
+            // Asosiy Balans Tarixiga ham saqlash
+            historyData.unshift({ id: Date.now(), title: txTitle, sum: q.sum, cat: "Boshqa", type: txType, date: todayStr });
+            
+            qarzData.splice(idx, 1);
+            saveData();
+            updateQarzUI();
+            updateUI();
+            alert("Qarz to'landi va Qarzlar Tarixiga saqlandi!");
+        }
+    }
+
     function updateQarzUI() {
         var qList = document.getElementById('qarz-list');
         qList.innerHTML = '';
 
-        qarzData.forEach(function(q) {
-            var div = document.createElement('div');
-            div.className = 'item';
-            var deadlineText = q.deadline ? '<br><small style="color:var(--chiqim);">⏳ Muddat: ' + q.deadline + '</small>' : '';
-            div.innerHTML = '<div><strong>' + q.name + '</strong> (' + (q.type === 'berdim' ? 'Berilgan' : 'Olingan') + ')' + deadlineText + '</div>' +
-                '<div><span style="font-weight:600;">' + formatMoney(q.sum) + '</span></div>';
-            qList.appendChild(div);
-        });
+        if (currentQarzView === 'active') {
+            if (qarzData.length === 0) {
+                qList.innerHTML = '<div style="font-size:12px; opacity:0.6; padding: 6px 0;">Aktiv qarzlar yo\'q</div>';
+                return;
+            }
+
+            qarzData.forEach(function(q) {
+                var div = document.createElement('div');
+                div.className = 'item';
+                var deadlineText = q.deadline ? '<br><small style="color:var(--chiqim);">⏳ Muddat: ' + q.deadline + '</small>' : '';
+                
+                div.innerHTML = '<div><strong>' + q.name + '</strong> (' + (q.type === 'berdim' ? 'Berilgan' : 'Olingan') + ')' + deadlineText + '</div>' +
+                    '<div style="text-align:right;"><span style="font-weight:600;">' + formatMoney(q.sum) + '</span><br>' +
+                    '<span class="action-link" style="color:var(--kirim);" onclick="qarzTolandi(' + q.id + ')">✓ To\'landi</span>' +
+                    '<span class="action-link" style="color:var(--chiqim);" onclick="deleteQarz(' + q.id + ')">O\'chirish</span></div>';
+                qList.appendChild(div);
+            });
+        } else {
+            if (qarzHistoryData.length === 0) {
+                qList.innerHTML = '<div style="font-size:12px; opacity:0.6; padding: 6px 0;">To\'langan qarzlar tarixi yo\'q</div>';
+                return;
+            }
+
+            qarzHistoryData.forEach(function(q) {
+                var div = document.createElement('div');
+                div.className = 'item';
+                div.innerHTML = '<div><strong>' + q.name + '</strong> <span style="color:var(--kirim); font-size:11px;">(✓ To\'langan)</span><br><small style="opacity:0.6;">Sana: ' + q.paidDate + '</small></div>' +
+                    '<div style="text-align:right;"><span style="font-weight:600;">' + formatMoney(q.sum) + '</span><br>' +
+                    '<span class="action-link" style="color:var(--chiqim);" onclick="deleteQarzHistory(' + q.id + ')">O\'chirish</span></div>';
+                qList.appendChild(div);
+            });
+        }
     }
 
     function exportToCSV() {
-        var csvContent = "data:text/csv;charset=utf-8,Nomi,Summa,Kategoriya,Tur,Sana\n";
+        if (historyData.length === 0) {
+            return alert("Yuklab olish uchun ma'lumot mavjud emas!");
+        }
+
+        var csvStr = "\uFEFFNomi,Summa,Kategoriya,Tur,Sana\n";
         historyData.forEach(function(r) {
-            csvContent += r.title + "," + r.sum + "," + r.cat + "," + r.type + "," + r.date + "\n";
+            csvStr += '"' + r.title + '",' + r.sum + ',"' + r.cat + '",' + r.type + ',"' + r.date + '"\n';
         });
-        var encodedUri = encodeURI(csvContent);
+
+        var blob = new Blob([csvStr], { type: 'text/csv;charset=utf-8;' });
+        var url = URL.createObjectURL(blob);
+        
         var link = document.createElement("a");
-        link.setAttribute("href", encodedUri);
-        link.setAttribute("download", "capixy_expenses.csv");
+        link.href = url;
+        link.setAttribute("download", "capixy_hisobot.csv");
         document.body.appendChild(link);
         link.click();
+        document.body.removeChild(link);
     }
 
     function openSettingModal(type) {
@@ -551,10 +643,34 @@
         var body = document.getElementById('modal-body');
         modal.style.display = 'flex';
 
-        if (type === 'pin') {
+        if (type === 'currency') {
+            title.innerText = "Valyuta Kurslari (Markaziy Bank)";
+            if (allRates.length === 0) {
+                body.innerHTML = "<p style='font-size:12px; opacity:0.6;'>Kurs ma'lumotlari yuklanmoqda...</p>";
+                fetchLiveExchangeRate();
+            } else {
+                var tracked = ['USD', 'EUR', 'RUB', 'TRY', 'GBP'];
+                var html = "<div style='max-height:260px; overflow-y:auto;'>";
+                allRates.forEach(function(item) {
+                    if (tracked.indexOf(item.Ccy) !== -1) {
+                        var diffStr = item.Diff > 0 ? "<span style='color:var(--kirim);'>+" + item.Diff + "</span>" : "<span style='color:var(--chiqim);'>" + item.Diff + "</span>";
+                        html += "<div class='currency-row'>" +
+                            "<div><strong>1 " + item.Ccy + "</strong> <small style='opacity:0.6;'>(" + item.CcyNm_UZ + ")</small></div>" +
+                            "<div style='text-align:right;'><strong>" + parseFloat(item.Rate).toLocaleString() + " so'm</strong><br><small style='font-size:10px;'>" + diffStr + "</small></div>" +
+                            "</div>";
+                    }
+                });
+                html += "</div>";
+                body.innerHTML = html;
+            }
+        } else if (type === 'pin') {
             title.innerText = "PIN & Biometriya Sozlash";
-            body.innerHTML = '<input type="password" id="new-pin-inp" maxlength="4" class="inp" placeholder="4 xonali PIN kiriting">' +
-                '<button class="btn-main" onclick="savePin()">Saqlash</button>';
+            var currentPinText = userPin.length === 4 ? "<p style='font-size:12px; color:var(--kirim); margin-bottom:8px;'>PIN-kod faollashtirilgan</p>" : "";
+            
+            body.innerHTML = currentPinText +
+                '<input type="password" id="new-pin-inp" maxlength="4" class="inp" placeholder="Yangi 4 xonali PIN">' +
+                '<button class="btn-main" onclick="savePin()" style="margin-bottom:8px;">Saqlash</button>' +
+                (userPin.length === 4 ? '<button class="btn-main" onclick="removePin()" style="background:var(--chiqim);">PIN-kodni o\'chirish</button>' : '');
         } else if (type === 'theme') {
             title.innerText = "Mavzu";
             body.innerHTML = '<button class="btn-main" style="margin-bottom:8px;" onclick="applyTheme(\'dark\'); closeSettingModal();">🌙 Dark</button>' +
@@ -569,8 +685,18 @@
             saveData();
             checkPinLock();
             closeSettingModal();
-            alert("PIN saqlandi! Face ID va Touch ID ham faollashdi.");
+            alert("PIN saqlandi!");
         } else alert("4 ta raqam kiriting!");
+    }
+
+    function removePin() {
+        if (confirm("PIN-kodni o'chirib tashlamoqchimisiz?")) {
+            userPin = "";
+            saveData();
+            checkPinLock();
+            closeSettingModal();
+            alert("PIN-kod o'chirildi!");
+        }
     }
 
     function applyTheme(theme) {
